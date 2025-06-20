@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>AccessiSpeak - Text-to-Speech Accessibility Tool</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="material-icons">accessibility</span>
+                <h1>AccessiSpeak</h1>
+            </div>
+            <p class="tagline">Empowering accessibility through voice technology</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Purpose Section -->
+            <section class="purpose-section">
+                <div class="purpose-card">
+                    <div class="purpose-icon">
+                        <span class="material-icons">hearing</span>
+                    </div>
+                    <div class="purpose-content">
+                        <h2>Built for Everyone</h2>
+                        <p>Supporting individuals with visual impairments, dyslexia, learning disabilities, and anyone who learns better through audio.</p>
+                        <div class="features-list">
+                            <div class="feature-item">
+                                <span class="material-icons">visibility_off</span>
+                                <span>Visual Impairment Support</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="material-icons">school</span>
+                                <span>Learning Assistance</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="material-icons">language</span>
+                                <span>Multi-language Support</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Text Input Section -->
+            <section class="input-section">
+                <div class="input-card">
+                    <div class="input-header">
+                        <h3>Enter Your Text</h3>
+                        <div class="input-actions">
+                            <button id="clearBtn" class="action-btn" title="Clear text">
+                                <span class="material-icons">clear</span>
+                            </button>
+                            <button id="pasteBtn" class="action-btn" title="Paste from clipboard">
+                                <span class="material-icons">content_paste</span>
+                            </button>
+                            <button id="uploadBtn" class="action-btn" title="Upload text file">
+                                <span class="material-icons">upload_file</span>
+                            </button>
+                            <button id="saveBtn" class="action-btn" title="Save text to file">
+                                <span class="material-icons">save</span>
+                            </button>
+                            <input type="file" id="fileInput" accept=".txt" style="display: none;">
+                        </div>
+                    </div>
+                    
+                    <div class="textarea-container">
+                        <textarea 
+                            id="textInput" 
+                            placeholder="Paste your article, document, or any text here. This tool will help you listen to content instead of reading it..."
+                            aria-label="Text input for speech conversion"
+                        ></textarea>
+                        <div class="input-stats">
+                            <span class="char-count">
+                                <span id="charCount">0</span> characters
+                            </span>
+                            <span class="word-count">
+                                <span id="wordCount">0</span> words
+                            </span>
+                            <span class="reading-time">
+                                Est. <span id="readingTime">0</span> min read
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Controls Section -->
+            <section class="controls-section">
+                <div class="controls-card">
+                    <div class="voice-settings">
+                        <div class="setting-group">
+                            <label for="voiceSelect">Voice Selection</label>
+                            <div class="select-wrapper">
+                                <select id="voiceSelect" aria-label="Select voice">
+                                    <option>Loading voices...</option>
+                                </select>
+                                <span class="material-icons">keyboard_arrow_down</span>
+                            </div>
+                        </div>
+
+                        <div class="setting-group">
+                            <label for="speedRange">Reading Speed</label>
+                            <div class="slider-container">
+                                <span class="slider-label">Slow</span>
+                                <input type="range" id="speedRange" min="0.5" max="2" value="1" step="0.1" aria-label="Reading speed">
+                                <span class="slider-label">Fast</span>
+                                <span class="slider-value" id="speedValue">1.0x</span>
+                            </div>
+                        </div>
+
+                        <div class="setting-group">
+                            <label for="pitchRange">Voice Pitch</label>
+                            <div class="slider-container">
+                                <span class="slider-label">Low</span>
+                                <input type="range" id="pitchRange" min="0.5" max="2" value="1" step="0.1" aria-label="Voice pitch">
+                                <span class="slider-label">High</span>
+                                <span class="slider-value" id="pitchValue">1.0x</span>
+                            </div>
+                        </div>
+
+                        <div class="setting-group">
+                            <label for="volumeRange">Volume</label>
+                            <div class="slider-container">
+                                <span class="slider-label">Quiet</span>
+                                <input type="range" id="volumeRange" min="0" max="1" value="1" step="0.1" aria-label="Volume">
+                                <span class="slider-label">Loud</span>
+                                <span class="slider-value" id="volumeValue">100%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Playback Controls -->
+                    <div class="playback-controls">
+                        <button id="playBtn" class="control-btn primary" aria-label="Start reading">
+                            <span class="material-icons">play_arrow</span>
+                            <span>Start Reading</span>
+                        </button>
+                        <button id="pauseBtn" class="control-btn secondary" disabled aria-label="Pause reading">
+                            <span class="material-icons">pause</span>
+                            <span>Pause</span>
+                        </button>
+                        <button id="stopBtn" class="control-btn danger" disabled aria-label="Stop reading">
+                            <span class="material-icons">stop</span>
+                            <span>Stop</span>
+                        </button>
+                        <button id="downloadBtn" class="control-btn download" title="Download as audio (coming soon)" disabled>
+                            <span class="material-icons">download</span>
+                            <span>Download Audio</span>
+                        </button>
+                    </div>
+
+                    <!-- Progress Indicator -->
+                    <div class="progress-section" id="progressSection" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="progress-info">
+                            <span id="progressText">Ready to read</span>
+                            <span id="timeRemaining"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Actions -->
+            <section class="quick-actions">
+                <div class="quick-actions-card">
+                    <h3>Quick Actions</h3>
+                    <div class="quick-buttons">
+                        <button class="quick-btn" data-text="Welcome to AccessiSpeak. This tool helps make text content accessible through speech synthesis.">
+                            <span class="material-icons">info</span>
+                            <span>Demo Text</span>
+                        </button>
+                        <button class="quick-btn" data-text="The quick brown fox jumps over the lazy dog. This sentence contains every letter of the alphabet.">
+                            <span class="material-icons">spellcheck</span>
+                            <span>Test Voice</span>
+                        </button>
+                        <button id="keyboardShortcuts" class="quick-btn">
+                            <span class="material-icons">keyboard</span>
+                            <span>Shortcuts</span>
+                        </button>
+                        <button id="settingsBtn" class="quick-btn">
+                            <span class="material-icons">settings</span>
+                            <span>Settings</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Statistics Section -->
+            <section class="stats-section">
+                <div class="stats-card">
+                    <h3>Usage Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <span class="material-icons">record_voice_over</span>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-number" id="totalReads">0</span>
+                                <span class="stat-label">Total Reads</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <span class="material-icons">timer</span>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-number" id="totalTime">0m</span>
+                                <span class="stat-label">Time Listened</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <span class="material-icons">article</span>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-number" id="totalWords">0</span>
+                                <span class="stat-label">Words Read</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <span class="material-icons">favorite</span>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-number" id="favoriteVoice">-</span>
+                                <span class="stat-label">Favorite Voice</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <p>&copy; 2025 AccessiSpeak - Making content accessible for everyone</p>
+                    <p class="developer-credit">Developed by <strong>Pranali Suryawanshi</strong></p>
+                </div>
+                <div class="footer-right">
+                    <div class="accessibility-note">
+                        <span class="material-icons">universal_access</span>
+                        <span>Working on Many sections</span>
+                    </div>
+                    <div class="social-links">
+                        <button class="social-btn" title="Share on Twitter">
+                            <span class="material-icons">share</span>
+                        </button>
+                        <button class="social-btn" title="Report Issue">
+                            <span class="material-icons">bug_report</span>
+                        </button>
+                        <button class="social-btn" title="Give Feedback">
+                            <span class="material-icons">feedback</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Keyboard Shortcuts Modal -->
+        <div id="shortcutsModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Keyboard Shortcuts</h3>
+                    <button id="closeModal" class="close-btn">
+                        <span class="material-icons">close</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="shortcut-item">
+                        <kbd>Space</kbd>
+                        <span>Play/Pause reading</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <kbd>Escape</kbd>
+                        <span>Stop reading</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <kbd>Ctrl</kbd> + <kbd>Enter</kbd>
+                        <span>Start reading</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <kbd>Ctrl</kbd> + <kbd>V</kbd>
+                        <span>Paste text</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <kbd>Ctrl</kbd> + <kbd>S</kbd>
+                        <span>Save text to file</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <kbd>↑</kbd> / <kbd>↓</kbd>
+                        <span>Adjust speed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settingsModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Settings</h3>
+                    <button id="closeSettingsModal" class="close-btn">
+                        <span class="material-icons">close</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="autoPlay" />
+                            <span>Auto-play when text is pasted</span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="highlightText" />
+                            <span>Highlight text while reading</span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="saveStats" checked />
+                            <span>Save usage statistics</span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="darkMode" />
+                            <span>Dark mode (coming soon)</span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <button id="resetStats" class="reset-btn">
+                            <span class="material-icons">refresh</span>
+                            Reset Statistics
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Container -->
+        <div id="notificationContainer" class="notification-container"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
